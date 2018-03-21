@@ -3,7 +3,6 @@
 
 LiquidCrystal_PCF8574 lcd(0x3F);
 
-int show;
 int base_dist;
 int ave_dist = 0;
 unsigned long start_time = 0;
@@ -36,17 +35,25 @@ void setup()
   base_dist = analogRead(0);
   ave_dist += base_dist;
   lcd.setCursor(0, 0);
-  lcd.print(ave_dist);
+  lcd.print((6762/(base_dist-9))-4);
+  lcd.print("cm");
   delay(100);
   i++;
   }
   ave_dist = ave_dist/10;
-  lcd.setCursor(0, 0);
+  lcd.setCursor(0, 1);
+  lcd.print("Ave: ");
   lcd.print((6762/(ave_dist-9))-4);
+  lcd.print("cm");
 
-  delay(1000);
+  delay(3000);
   
   lcd.clear();
+  if(ave_dist <400){
+    lcd.print("Too far. Press reset and try again.");
+  }else{
+  lcd.print("Ready to go!");
+  }
 }
 
 void loop()
@@ -69,13 +76,6 @@ int value = analogRead(0);
   else{
   //  lcd.print("not found");
   }
-  //lcd.setCursor(0, 1);
-  //start_time = micros();
-  //lcd.print(start_time);
 
-  lcd.setCursor(0, 2);
-  if(distance <= 10){
-    lcd.print(start_time);
-  }
 delay(50);
 }
