@@ -7,7 +7,7 @@ LiquidCrystal_PCF8574 lcd(0x3F);
 int base_dist;
 int ave_dist = 0;
 int lap = 0;
-unsigned long start_time = 0;
+float start_time = 0;
 
 void setup()
 {
@@ -64,7 +64,7 @@ int value = analogRead(0);
   //valueがave_distから100変化したら反応
   lcd.setCursor(10, 1);
   if(ave_dist - value >= 100){
-    start_time = micros();
+    start_time = millis()/1000;
     lcd.print("Lap:");
     lcd.print(lap);
     lcd.print(" >> ");
