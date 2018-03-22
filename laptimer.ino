@@ -3,8 +3,10 @@
 
 LiquidCrystal_PCF8574 lcd(0x3F);
 
+
 int base_dist;
 int ave_dist = 0;
+int lap = 0;
 unsigned long start_time = 0;
 
 void setup()
@@ -26,7 +28,7 @@ void setup()
   } else {
     Serial.println(": LCD not found. Hello LCD");
   }
-  lcd.begin(20, 4); // initialize the lcd
+  lcd.begin(20, 4);
   lcd.setBacklight(255);
   lcd.home(); lcd.clear();
   lcd.print("Now initializing....");
@@ -59,15 +61,15 @@ void setup()
 void loop()
 {
 int value = analogRead(0);
-  int distance = (6762/(value-9))-4;
-  //50cm以下で反応
   //valueがave_distから100変化したら反応
-  lcd.setCursor(0, 0);
+  lcd.setCursor(10, 1);
   if(ave_dist - value >= 100){
     start_time = micros();
+    lcd.print("Lap:");
+    lcd.print(lap);
+    lcd.print(" >> ");
     lcd.print(start_time);
-    //lcd.print(distance);
-    lcd.print(" micro sec");
+    lcd.print(" sec");
   lcd.setCursor(0, 4);
     lcd.print(value);
     lcd.print("V");
