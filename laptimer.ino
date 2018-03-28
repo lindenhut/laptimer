@@ -8,6 +8,8 @@ int base_dist;
 int ave_dist = 0;
 int lap = 0;
 float start_time = 0;
+float lap_now=0, lap_1=0, lap_2=0 ;
+float avetime = 0.0;
 char s[16];
 void setup()
 {
@@ -31,7 +33,7 @@ void setup()
   lcd.begin(20, 4);
   lcd.setBacklight(255);
   lcd.home(); lcd.clear();
-  lcd.print("Now initializing....");
+  lcd.print("Now initializing...");
   
   int i = 0;
   while(i<10){
@@ -64,30 +66,42 @@ lcd.clear();
 float last_time = 0.0;
 void loop()
 {
-float value = analogRead(0);
-  lcd.setCursor(10, 1);
+int value = analogRead(0);
+  lcd.setCursor(0, 0);
   start_time = millis()/1000.0;
-  lcd.print("L");
+  lcd.print("LAP:");
   lcd.print(lap);
   lcd.print("> ");
-  lcd.print(start_time);
-  if(ave_dist - value >= 50){
+  lcd.print(start_time - last_time);
+  if(value - ave_dist >= ave_dist / 10){
     start_time = millis()/1000.0;
+    lap_2 = lap_1;
+    lap_1 = lap_now;
+    lap_now = start_time - last_time;
+    lcd.setCursor(10, 1);
+    lcd.print("L1> ");
+    lcd.print(lap_now);
     lcd.setCursor(10, 2);
-    lcd.print("L");
-    lcd.print(lap);
-    lcd.print("> ");
-    lcd.print(start_time - last_time);
+    lcd.print("L2> ");
+    lcd.print(lap_1);
+    lcd.setCursor(10, 3);
+    lcd.print("L3> ");
+    lcd.print(lap_2);    
     lap ++;
     last_time = start_time;
+
+    lcd.setCursor(0, 2);
+    lcd.print("ave/time");
+    lcd.setCursor(0, 3);
+    avetime = (avetime* (lap - 1 ) + lap_now )/lap;
+    lcd.print(avetime);
     delay(1000);
   }
   else{
   //  lcd.print("not found");
   }
-  lcd.setCursor(0, 4);
-//  lcd.print(dtostrf(value*5/1024, 5, 2, s));
-  lcd.print(value);
-  lcd.print("V");
-delay(50);
+//  lcd.setCursor(4, 3);
+//  lcd.print(dtostrf(value/5*1024, 5, 2, s));
+//  lcd.print(value);
+delay(10);
 }
