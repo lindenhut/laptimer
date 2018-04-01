@@ -54,7 +54,7 @@ void setup()
 
   
   lcd.home();
-  if(ave_dist <400){
+  if(ave_dist <200){
     lcd.print("Failed to init. Please reset.");
   }else{
     lcd.print("Ready to go!       ");
@@ -73,7 +73,7 @@ int value = analogRead(0);
   lcd.print(lap);
   lcd.print("> ");
   lcd.print(start_time - last_time);
-  if(value - ave_dist >= ave_dist / 10){
+  if(value - ave_dist >= 50){
     start_time = millis()/1000.0;
     lap_2 = lap_1;
     lap_1 = lap_now;
@@ -86,15 +86,17 @@ int value = analogRead(0);
     lcd.print(lap_1);
     lcd.setCursor(10, 3);
     lcd.print("L3> ");
-    lcd.print(lap_2);    
-    lap ++;
+    lcd.print(lap_2);
     last_time = start_time;
 
     lcd.setCursor(0, 2);
     lcd.print("ave/time");
     lcd.setCursor(0, 3);
-    avetime = (avetime* (lap - 1 ) + lap_now )/lap;
-    lcd.print(avetime);
+    iF(lap > 1){
+      avetime = (avetime* (lap -1 ) + lap_now )/ lap;
+      lcd.print(avetime);
+    }
+    lap ++;
     delay(1000);
   }
   else{
